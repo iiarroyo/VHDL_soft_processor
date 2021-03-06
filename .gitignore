@@ -5,4 +5,8 @@ simulation/
 *.qpf
 *.qsf
 *.qws
+<<<<<<< HEAD
 *.bak
+=======
+*.DS_Store
+>>>>>>> b7ae2656f1a0dba88d6c2870152bd06be9b2f003
