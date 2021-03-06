@@ -2,3 +2,4 @@ db/
 *.qpf
 *.qsf
 *.qws
+*.DS_Store
