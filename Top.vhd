@@ -1,0 +1,9 @@
+  ----------------------------------------------------------------------------------
+-- Company:       ITESM - CQ
+-- Engineer:	   RickWare
+-- 
+-- Create Date:    08:08:38 12/November/2019 
+-- Design Name: 
+-- Module Name:    British Traffic Light Controller
+--                 Fixed time between states
+----------------------------------------------------------------------------------
