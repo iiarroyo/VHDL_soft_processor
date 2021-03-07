@@ -1,46 +1,205 @@
+
 ----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
+-- Company:        ITESM - Campus Qro.        
+-- Engineer:       A01706424 - José Miguel Luna Vega
 -- 
--- Create Date:    
--- Design Name: 
--- Module Name:    
--- Project Name: 
--- Target Devices: MAX10 LITe-10 FPGA board
--- Tool versions: Quartus Prime Lite 18.1
--- Description: 
+-- Create Date:    06/03/2021
+-- Module Name:    Reto2002B_CPU (TOP) 
+-- Project Name:   
+-- Target Devices: FPGA DE10-Lite 
+-- Tool versions:  Quartus Prime Lite 18.1
+-- Description:     
 --
--- Dependencies: 
---
+-- Dependencies:   
+-- Revision: v1
+-- Revision 0.01 - File Created
+-- Additional Comments: 
 --
 ----------------------------------------------------------------------------------
--- Library and Package declaration (commonly used)
+
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
-use IEEE.std_logic_unsigned.all;
 
 entity Top is
-  port (
-     Clk   : in  STD_LOGIC;
-	  Rst   : in  STD_LOGIC);
-end top;
 
-architecture a of Top is
+   Port ( 
+		-- CtrlUnit
+		
+		--For Dec7Seg
+		D        : in  std_logic_vector(7 downto 0);
+		Switches : in  std_logic_vector(7 downto 0);
+		SegH     : out std_logic_vector(7 downto 0);
+		SegL     : out std_logic_vector(7 downto 0);
+		CLK,Rst  : in std_logic
+	);
+end Top;
 
- component 	FullAdder 
-   port (
-		InA,InB : in unsigned(7 downto 0);
-	   S       : out unsigned(7 downto 0));
- end component;
- 
- component Mux4to1
+architecture rlt of Top is
+
+	component Dec7Seg
 	port (
-		InA,InB,InC,InD : in  unsigned (7 downto 0);
-		Sel             : in  unsigned (2 downto 0);
-		M               : out unsigned (7 downto 0));
+		D   : in  std_logic_vector(3 downto 0);
+		Seg : out std_logic_vector(7 downto 0)
+	);
 	end component;
+ 
+	-- component CtrlUnit
+	--  Port ( 
+	-- 	Oper              : in std_logic_vector(3 downto 0);
+    --   RegSrc_Op,JiJr_Op : out std_logic_vector(1 downto 0);
+    --   ALUOp_Op          : out std_logic_vector(2 downto 0);
+    --   RegWrite_Op,Write7Seg_Op,WriteLEDs_Op,PCInc_Op,Beq_Op : out std_logic
+	-- );
+	-- end component;
 	
+	component 	FullAdder 
+   port (
+		InA,InB : in std_logic_vector(7 downto 0);
+	    S       : out std_logic_vector(7 downto 0));
+	end component;
+ 
+	component Mux4to1
+	port (
+		InA,InB,InC,InD : in  std_logic_vector(7 downto 0);
+		Sel             : in  std_logic_vector(1 downto 0);
+		M               : out std_logic_vector(7 downto 0));
+	end component;
+
+	component ALU
+		port ( 
+			Sel     : in  std_logic_vector(2 downto 0);
+			InA,InB : in  std_logic_vector(7 downto 0);
+			Oper    : out std_logic_vector(7 downto 0);
+			Zero    : out std_logic);
+		End component;
+
+	component BrEq 
+		port(
+			InA	: in std_logic;
+			InB	: in std_logic;
+			Sel	: in std_logic;
+			M		: out std_logic);
+		end component;
+
+	component Increm
+		port(
+			InA	: in std_logic_vector(7 downto 0);
+			InB	: in std_logic_vector(7 downto 0);
+			Sel	: in std_logic;
+			M		: out std_logic_vector(7 downto 0));
+	end component;
+
+	component ProgCounter
+		port(
+			Clk	: in std_logic;
+			Rst	: in std_logic;
+			Cen	: in std_logic;
+			PCIn	: in std_logic_vector(7 downto 0);
+			PCOut	: out std_logic_vector(7 downto 0));
+	end component;
+	component Reg8 
+		port(
+			Clk	: in std_logic;
+			Rst	: in std_logic;
+			Cen	: in std_logic;
+			En		: in std_logic;
+			Inrs	: in std_logic_vector(7 downto 0);
+			OutD	: out std_logic_vector(7 downto 0));
+	end component;
+
+   signal Opcode      : std_logic_vector(3 downto 0);
+   signal RegSrc,JiJr : std_logic_vector(1 downto 0);
+   signal ALUOp       : std_logic_vector(2 downto 0);
+   signal RegWrite,Write7Seg,WriteLEDs,PCInc,Beq :  std_logic;
+   signal rsd,rtd,ALUOper : std_logic_vector(7 downto 0);
+   signal ALUZero     : std_logic;
+   signal ClkEn       : std_logic;
+   signal BrJiJrM     : std_logic_vector(7 downto 0);
+   signal PC          : std_logic_vector(7 downto 0);
+   signal IncremM     : std_logic_vector(7 downto 0);
+   signal AdderS      : std_logic_vector(7 downto 0);
+   signal imm         : std_logic_vector(7 downto 0);
+   signal DataM       : std_logic_vector(7 downto 0);
+   signal BrEqM       : std_logic;
 begin
-	 
-end a;
+C01: ProgCounter
+port map(
+		Clk	  => CLK,
+		Rst	  => RST,
+		Cen	  => ClkEn,
+		PCIn  =>BrJiJrM,
+		PCOut => PC)
+	;
+	-- C03 : CtrlUnit
+	-- port map (
+	-- 	Oper         => Opcode,
+	-- 	RegSrc_OP    => RegSrc,
+    --   JiJr_Op      => JiJr,
+    --   ALUOp_Op     => ALUOp, 
+    --   RegWrite_Op  => RegWrite,
+	-- 	Write7Seg_Op => Write7Seg,
+	-- 	WriteLEDs_Op => WriteLEDs,
+	-- 	PCInc_Op     => PCInc,
+	-- 	Beq_Op       => Beq
+	-- );
+   C05: ALU
+   port map (
+		Sel => ALUOp,
+		InA => rsd,
+		InB => rtd,
+		Oper => ALUOper,
+		Zero => ALUZero
+   );
+   C06: FullAdder
+   port map(
+	   InA => PC,
+	   InB => IncremM,
+	   S   =>AdderS
+   );
+   C07: Increm
+   port map(
+	   InA => "00000001",
+	   InB => imm,
+	   Sel => BrEqM,
+	   M => IncremM
+   );
+   C08: BrEq
+   port map(
+	   InA => PCInc,
+	   InB => ALUZero,
+	   Sel => Beq,
+	   M => BrEqM
+   );
+   C09: Mux4to1
+   port map(
+	   InA => imm,
+	   InB => PC,
+	   InC => ALUOper,
+	   InD => Switches,
+	   Sel => RegSrc,
+	   M => DataM
+   );
+   C10: Mux4to1
+   port map(
+	   InA => AdderS,
+	   InB => rsd,
+	   InC => imm,
+	   InD => "00000000",
+	   Sel => JiJr,
+	   M   => BrJiJrM
+   );
+   C13 : Dec7Seg
+	port map (
+		D   => D(7 downto 4),
+		Seg => SegH  
+	);
+	
+	C14 : Dec7Seg
+	port map (
+		D   => D(3 downto 0),
+		Seg => SegL 
+	);  
+	
+end rlt;
+
