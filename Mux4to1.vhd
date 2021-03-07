@@ -5,9 +5,9 @@ Use ieee.numeric_std.all;
 Entity Mux4to1 is
 port 
 (
-	InA,InB,InC,InD : in  unsigned (7 downto 0);
-	Sel             : in  unsigned (2 downto 0);
-	M               : out unsigned (7 downto 0)
+	InA,InB,InC,InD : in  std_logic_vector(7 downto 0);
+	Sel             : in  std_logic_vector(1 downto 0);
+	M               : out std_logic_vector(7 downto 0)
 );
 end Mux4to1;
 
