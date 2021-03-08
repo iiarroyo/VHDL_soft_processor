@@ -31,7 +31,7 @@ entity Top is
 		Switches : in  std_logic_vector(7 downto 0);
 		SegH     : out std_logic_vector(7 downto 0);
 		SegL     : out std_logic_vector(7 downto 0);
-		CLK,Rst  : in std_logic
+		CLK50MHz,Rst,Clr  : in std_logic
 	);
 end Top;
 
@@ -108,6 +108,29 @@ architecture rlt of Top is
 			OutD	: out std_logic_vector(7 downto 0));
 	end component;
 
+	component CtrlUnit
+		Port ( 
+			 Oper              : in std_logic_vector(3 downto 0);
+		   RegSrc_Op,JiJr_Op : out std_logic_vector(1 downto 0);
+		   ALUOp_Op          : out std_logic_vector(2 downto 0);
+		   RegWrite_Op,Write7Seg_Op,WriteLEDs_Op,PCInc_Op,Beq_Op : out std_logic);
+	 end component;
+
+	 component Registers 
+	port (
+		SelA  : in  std_logic_vector(2 downto 0); 
+		SelB	: in  std_logic_vector(2 downto 0);
+		SelWR : in  std_logic_vector(2 downto 0); 
+		Data  : in  std_logic_vector(7 downto 0);
+		Clk   : in  std_logic;
+		Cen   : in  std_logic;
+		Rst   : in  std_logic;
+		WE    : in  std_logic;
+		OutA  : out std_logic_vector(7 downto 0);
+		OutB  : out std_logic_vector(7 downto 0)
+	);
+	end component;
+
    signal Opcode      : std_logic_vector(3 downto 0);
    signal RegSrc,JiJr : std_logic_vector(1 downto 0);
    signal ALUOp       : std_logic_vector(2 downto 0);
@@ -122,27 +145,35 @@ architecture rlt of Top is
    signal imm         : std_logic_vector(7 downto 0);
    signal DataM       : std_logic_vector(7 downto 0);
    signal BrEqM       : std_logic;
+   --input signals for registers
+	signal rs    : std_logic_vector(2 downto 0); 
+	signal rt    : std_logic_vector(2 downto 0); 
+	signal rd    : std_logic_vector(2 downto 0); 
+	--signal DataM : std_logic_vector(7 downto 0);
+	--signal ClkEn : std_logic;
+	-- signal rsd   : std_logic_vector(7 downto 0);
+	-- signal rtd   : std_logic_vector(7 downto 0);
 begin
 C01: ProgCounter
 port map(
-		Clk	  => CLK,
+		Clk	  => CLK50MHz,
 		Rst	  => RST,
 		Cen	  => ClkEn,
 		PCIn  =>BrJiJrM,
 		PCOut => PC)
 	;
-	-- C03 : CtrlUnit
-	-- port map (
-	-- 	Oper         => Opcode,
-	-- 	RegSrc_OP    => RegSrc,
-    --   JiJr_Op      => JiJr,
-    --   ALUOp_Op     => ALUOp, 
-    --   RegWrite_Op  => RegWrite,
-	-- 	Write7Seg_Op => Write7Seg,
-	-- 	WriteLEDs_Op => WriteLEDs,
-	-- 	PCInc_Op     => PCInc,
-	-- 	Beq_Op       => Beq
-	-- );
+	C03 : CtrlUnit
+	port map (
+		Oper         => Opcode,
+		RegSrc_OP    => RegSrc,
+      JiJr_Op      => JiJr,
+      ALUOp_Op     => ALUOp, 
+      RegWrite_Op  => RegWrite,
+		Write7Seg_Op => Write7Seg,
+		WriteLEDs_Op => WriteLEDs,
+		PCInc_Op     => PCInc,
+		Beq_Op       => Beq
+	);
    C05: ALU
    port map (
 		Sel => ALUOp,
@@ -151,6 +182,19 @@ port map(
 		Oper => ALUOper,
 		Zero => ALUZero
    );
+   C04 : Registers
+	port map (
+		SelA  => rs,
+		SelB	=> rt, 
+		SelWR => rd,
+		Data  => DataM,
+		Clk   => Clk50MHz,
+		Cen   => ClkEn,
+		Rst   => Clr,
+		WE    => RegWrite,
+		OutA  => rsd,
+		OutB  => rtd
+	);
    C06: FullAdder
    port map(
 	   InA => PC,
