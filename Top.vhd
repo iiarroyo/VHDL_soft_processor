@@ -1,10 +1,12 @@
 
 ----------------------------------------------------------------------------------
 -- Company:        ITESM - Campus Qro.        
--- Engineer:       A01706424 - José Miguel Luna Vega
+-- Engineers:       A01706424 - José Miguel Luna Vega
+--                  A01701466 - Carlos Emilio Magana Arias
+--                 A01706190 - Israel Ivan Arroyo Parada
 -- 
 -- Create Date:    06/03/2021
--- Module Name:    Reto2002B_CPU (TOP) 
+-- Module Name:    TOP
 -- Project Name:   
 -- Target Devices: FPGA DE10-Lite 
 -- Tool versions:  Quartus Prime Lite 18.1
@@ -183,12 +185,23 @@ architecture rlt of Top is
 	Clkout : out std_logic
 );
 end component;
+
 component DispOff
 	Port (
 			Turnoff    : out std_logic_vector(1 downto 0)
 			);
 end component;
 	
+component Mem
+Port(
+	Addr: in std_logic_vector(7 downto 0);
+	DataOp : out std_logic_vector(3 downto 0);
+	Datars : out std_logic_vector(2 downto 0);
+	Datart : out std_logic_vector(2 downto 0);
+	Datard : out std_logic_vector(2 downto 0);
+	Datai : out std_logic_vector(7 downto 0)
+);
+end component;
 begin
 
 	C01 : ProgCounter
@@ -197,9 +210,19 @@ begin
 		Rst	  => Clr,
 		Cen	  => ClkEn,
 		PCIn  =>BrJiJrM,
-		PCOut => PC)
-	;
+		PCOut => PC);
 	
+	C02: Mem
+	port map(
+
+		Addr => PC,
+		DataOp => opcode,
+		Datars => rs,
+		Datart => rt,
+		Datard => rd,
+		Datai => imm
+
+	);
 	
 	C03 : CtrlUnit
 	port map (
