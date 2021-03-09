@@ -24,7 +24,7 @@ begin
 		if (Rst = '0') then
 			c <= (others => '0');
 			OutD <= c;
-		elsif (rising_edge(Clk)) then
+		elsif (falling_edge(Clk)) then
 			if (Cen = '1') and (En = '1') then
 				c <= Inrs;
 				OutD <= c;

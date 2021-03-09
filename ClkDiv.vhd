@@ -1,7 +1,10 @@
+
 ----------------------------------------------------------------------------------
--- Company:        ITESM - Campus Qro.
--- Engineer:       A01706424 - José Miguel Luna Vega
--- 
+-- Company:        ITESM - Campus Qro.        
+-- Engineers:       A01706424 - José Miguel Luna Vega
+--                  A01701466 - Carlos Emilio Magana Arias
+--                 A01706190 - Israel Ivan Arroyo Parada
+--
 -- Create Date:    02/22/2021 
 -- Design Name: 
 -- Module Name:    ClkDiv 

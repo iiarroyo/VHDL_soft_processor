@@ -1,10 +1,11 @@
-
 ----------------------------------------------------------------------------------
 -- Company:        ITESM - Campus Qro.        
--- Engineer:       A01706424 - José Miguel Luna Vega
+-- Engineers:       A01706424 - José Miguel Luna Vega
+--                  A01701466 - Carlos Emilio Magana Arias
+--                 A01706190 - Israel Ivan Arroyo Parada
 -- 
 -- Create Date:    06/03/2021
--- Module Name:    CtrlUnit 
+-- Module Name:    CtrlUnit
 -- Project Name:   
 -- Target Devices: FPGA DE10-Lite 
 -- Tool versions:  Quartus Prime Lite 18.1
