@@ -45,14 +45,14 @@ begin
 				"101101001000" when Oper = "0110" else --  shl
 				"101111001000" when Oper = "0111" else --  shr
 			 
-				"00ZZZ1001000" when Oper = "1000" else --  ld
-				"01ZZZ1001000" when Oper = "1001" else --  spc
-				"00001000Z100" when Oper = "1010" else --  beq
-				"00ZZZ000Z010" when Oper = "1011" else --  ji
-				"ZZZZZ000Z001" when Oper = "1100" else --  jr
-				"ZZZZZ0101000" when Oper = "1101" else --  w7seg
-				"ZZZZZ0011000" when Oper = "1110" else --  wleds
-				"11ZZZ1001000" when Oper = "1111" else --  rsw
+				"000001001000" when Oper = "1000" else --  ld
+				"010001001000" when Oper = "1001" else --  spc
+				"000010000100" when Oper = "1010" else --  beq
+				"000000000010" when Oper = "1011" else --  ji
+				"000000000001" when Oper = "1100" else --  jr
+				"000000101000" when Oper = "1101" else --  w7seg
+				"000000011000" when Oper = "1110" else --  wleds
+				"110001001000" when Oper = "1111" else --  rsw
 			 
 				"000000000000"; -- All off
 
