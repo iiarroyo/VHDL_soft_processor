@@ -34,7 +34,10 @@ entity Top is
 		
 		--Clock and clear (reset)
 		Clk50MHz : in std_logic;
-		Clr      : in std_logic			
+		Clr      : in std_logic;
+		
+		
+		Turnoff  : out std_logic_vector(1 downto 0)
 	);
 	
 end Top;
@@ -180,7 +183,11 @@ architecture rlt of Top is
 	Clkout : out std_logic
 );
 end component;
-
+component DispOff
+	Port (
+			Turnoff    : out std_logic_vector(1 downto 0)
+			);
+end component;
 	
 begin
 
@@ -248,7 +255,7 @@ begin
 	
    C08 : BrEq
    port map(
-	   InA => PCInc,
+	   InA => not(PCInc),
 	   InB => ALUZero,
 	   Sel => Beq,
 	   M => BrEqM
@@ -316,6 +323,12 @@ begin
 		Clkin  => Clk50Mhz,
 		Rst    => Clr,
 		Clkout => ClkEn
+	);
+
+	C16: DispOff
+	port map
+	(
+		Turnoff => Turnoff
 	);
 
 	
