@@ -21,7 +21,7 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
-entity Reto2002B_CPU is
+entity Top is
 
    Port ( 
 		--top inputs
@@ -30,8 +30,6 @@ entity Reto2002B_CPU is
 		SegL     : out std_logic_vector(7 downto 0);
 
 		--top outputs (display and leds)
-		SegH : out std_logic_vector(7 downto 0);
-		SegL : out std_logic_vector(7 downto 0);
 		LEDs : out std_logic_vector(7 downto 0);
 		
 		--Clock and clear (reset)
@@ -39,9 +37,9 @@ entity Reto2002B_CPU is
 		Clr      : in std_logic			
 	);
 	
-end Reto2002B_CPU;
+end Top;
 
-architecture rlt of Reto2002B_CPU is
+architecture rlt of Top is
 
 	component Dec7Seg
 	port (
@@ -153,57 +151,11 @@ architecture rlt of Reto2002B_CPU is
 			OutD	: out std_logic_vector(7 downto 0));
 	end component;
 
-	component CtrlUnit
-		Port ( 
-			 Oper              : in std_logic_vector(3 downto 0);
-		   RegSrc_Op,JiJr_Op : out std_logic_vector(1 downto 0);
-		   ALUOp_Op          : out std_logic_vector(2 downto 0);
-		   RegWrite_Op,Write7Seg_Op,WriteLEDs_Op,PCInc_Op,Beq_Op : out std_logic);
-	 end component;
-
-	 component Registers 
-	port (
-		SelA  : in  std_logic_vector(2 downto 0); 
-		SelB	: in  std_logic_vector(2 downto 0);
-		SelWR : in  std_logic_vector(2 downto 0); 
-		Data  : in  std_logic_vector(7 downto 0);
-		Clk   : in  std_logic;
-		Cen   : in  std_logic;
-		Rst   : in  std_logic;
-		WE    : in  std_logic;
-		OutA  : out std_logic_vector(7 downto 0);
-		OutB  : out std_logic_vector(7 downto 0)
-	);
-	end component;
-
-   signal Opcode      : std_logic_vector(3 downto 0);
-   signal RegSrc,JiJr : std_logic_vector(1 downto 0);
-   signal ALUOp       : std_logic_vector(2 downto 0);
-   signal RegWrite,Write7Seg,WriteLEDs,PCInc,Beq :  std_logic;
-   signal rsd,rtd,ALUOper : std_logic_vector(7 downto 0);
-   signal ALUZero     : std_logic;
-   signal ClkEn       : std_logic;
-   signal BrJiJrM     : std_logic_vector(7 downto 0);
-   signal PC          : std_logic_vector(7 downto 0);
-   signal IncremM     : std_logic_vector(7 downto 0);
-   signal AdderS      : std_logic_vector(7 downto 0);
-   signal imm         : std_logic_vector(7 downto 0);
-   signal DataM       : std_logic_vector(7 downto 0);
-   signal BrEqM       : std_logic;
    --input signals for registers
-	signal rs    : std_logic_vector(2 downto 0); 
-	signal rt    : std_logic_vector(2 downto 0); 
-	signal rd    : std_logic_vector(2 downto 0); 
 	--signal DataM : std_logic_vector(7 downto 0);
 	--signal ClkEn : std_logic;
 	-- signal rsd   : std_logic_vector(7 downto 0);
 	-- signal rtd   : std_logic_vector(7 downto 0);
-begin
-C01: ProgCounter
-port map(
-		Clk	  => CLK50MHz,
-		Rst	  => RST,
-	
 	component BrEq 
 		port(
 			InA	: in std_logic;
@@ -220,6 +172,14 @@ port map(
 			Sel	: in std_logic;
 			M		: out std_logic_vector(7 downto 0));
 	end component;
+
+	component ClkDiv
+	port(
+	Clkin  : in std_logic;
+	Rst    : in std_logic;
+	Clkout : out std_logic
+);
+end component;
 
 	
 begin
@@ -269,21 +229,7 @@ begin
 		InB => rtd,
 		Oper => ALUOper,
 		Zero => ALUZero
-   );
-   C04 : Registers
-	port map (
-		SelA  => rs,
-		SelB	=> rt, 
-		SelWR => rd,
-		Data  => DataM,
-		Clk   => Clk50MHz,
-		Cen   => ClkEn,
-		Rst   => Clr,
-		WE    => RegWrite,
-		OutA  => rsd,
-		OutB  => rtd
-	);	
-	
+   );	
    C06 : FullAdder
    port map(
 	   InA => PC,
@@ -330,26 +276,26 @@ begin
 	   M   => BrJiJrM
    );
 	
-	C11 : Reg8
-	port map(
-		Clk  => Clk50Mhz,
-		Rst  => Clr,
-		Cen  => ClkEn,
-		En	  => Write7Seg,
-		Inrs => rsd,
-		OutD => D
-	);		
-	
-			
-	C12 : Reg8
-	port map(
-		Clk  => Clk50Mhz,
-		Rst  => Clr,
-		Cen  => ClkEn,
-		En	  => Write7Seg,
-		Inrs => rsd,
-		OutD => LEDs
-	);	
+   C11 : Reg8
+   port map(
+	   Clk  => Clk50Mhz,
+	   Rst  => Clr,
+	   Cen  => ClkEn,
+	   En	  => Write7Seg,
+	   Inrs => rsd,
+	   OutD => D
+   );		
+   
+		   
+   C12 : Reg8
+   port map(
+	   Clk  => Clk50Mhz,
+	   Rst  => Clr,
+	   Cen  => ClkEn,
+	   En	  => Write7Seg,
+	   Inrs => rsd,
+	   OutD => LEDs
+   );		
 	
 	
    C13 : Dec7Seg
@@ -364,6 +310,13 @@ begin
 		D   => D(3 downto 0),
 		Seg => SegL 
 	); 
+
+	C15 : ClkDiv
+	port map (
+		Clkin  => Clk50Mhz,
+		Rst    => Clr,
+		Clkout => ClkEn
+	);
 
 	
 end rlt;
