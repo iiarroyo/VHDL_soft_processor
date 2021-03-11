@@ -1,17 +1,17 @@
 
 ----------------------------------------------------------------------------------
 -- Company:        ITESM - Campus Qro.        
--- Engineers:       A01706424 - José Miguel Luna Vega
---                  A01701466 - Carlos Emilio Magana Arias
+-- Engineers:      A01706424 - José Miguel Luna Vega
+--                 A01701466 - Carlos Emilio Magana Arias
 --                 A01706190 - Israel Ivan Arroyo Parada
 -- 
 -- Create Date:    06/03/2021
 -- Module Name:    BrEq
--- Project Name:   
+-- Project Name:   RISC Processor Design 
 -- Target Devices: FPGA DE10-Lite 
 -- Tool versions:  Quartus Prime Lite 18.1
--- Description:     
---
+-- Description:    Multiplexor used to detect the control 
+--                 signals for Program Counter
 -- Dependencies:   
 -- Revision: v1
 -- Revision 0.01 - File Created
@@ -38,7 +38,7 @@ architecture rtl of BrEq is
   
 begin
 	
-	BrEqent: process(Sel)
+	BrEqent: process(Sel,InA,InB)
 	begin
 		if Sel = '0' then
 			c <= InA;

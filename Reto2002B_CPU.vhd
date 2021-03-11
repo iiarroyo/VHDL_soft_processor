@@ -1,14 +1,16 @@
 
 ----------------------------------------------------------------------------------
 -- Company:        ITESM - Campus Qro.        
--- Engineer:       A01706424 - José Miguel Luna Vega
--- 
+-- Engineers:      A01706424 - José Miguel Luna Vega
+--                 A01701466 - Carlos Emilio Magana Arias
+--                 A01706190 - Israel Ivan Arroyo Parada
+					
 -- Create Date:    06/03/2021
 -- Module Name:    Reto2002B_CPU (TOP) 
--- Project Name:   
+-- Project Name:   RISC Processor Design 
 -- Target Devices: FPGA DE10-Lite 
 -- Tool versions:  Quartus Prime Lite 18.1
--- Description:     
+-- Description:    Design of a CPU in VHDL and Verilog implemented on a FPGA
 --
 -- Dependencies:   
 -- Revision: v1
@@ -31,6 +33,7 @@ entity Reto2002B_CPU is
 		SegH : out std_logic_vector(7 downto 0);
 		SegL : out std_logic_vector(7 downto 0);
 		LEDs : out std_logic_vector(7 downto 0);
+		turnOff : out std_logic_vector(1 downto 0);
 		
 		--Clock and clear (reset)
 		Clk50MHz : in std_logic;
@@ -61,7 +64,7 @@ architecture rlt of Reto2002B_CPU is
 	end component;
 
 	--input signals for control unit
-	signal Opcode      : std_logic_vector(3 downto 0);
+	signal opcode      : std_logic_vector(3 downto 0);
 	--output signals from control unit
    signal RegSrc,JiJr : std_logic_vector(1 downto 0);
    signal ALUOp       : std_logic_vector(2 downto 0);
@@ -116,7 +119,7 @@ architecture rlt of Reto2002B_CPU is
    signal BrEqM       : std_logic;
 	
 	component ALU
-		port ( 
+	port ( 
 			Sel     : in  std_logic_vector(2 downto 0);
 			InA,InB : in  std_logic_vector(7 downto 0);
 			Oper    : out std_logic_vector(7 downto 0);
@@ -129,7 +132,7 @@ architecture rlt of Reto2002B_CPU is
 	
 	
 	component ProgCounter
-		port(
+	port(
 			Clk	: in std_logic;
 			Rst	: in std_logic;
 			Cen	: in std_logic;
@@ -142,7 +145,7 @@ architecture rlt of Reto2002B_CPU is
 
 	
 	component Reg8 
-		port(
+	port(
 			Clk	: in std_logic;
 			Rst	: in std_logic;
 			Cen	: in std_logic;
@@ -153,7 +156,7 @@ architecture rlt of Reto2002B_CPU is
 
 	
 	component BrEq 
-		port(
+	port(
 			InA	: in std_logic;
 			InB	: in std_logic;
 			Sel	: in std_logic;
@@ -162,7 +165,7 @@ architecture rlt of Reto2002B_CPU is
 
 	
 	component Increm
-		port(
+	port(
 			InA	: in std_logic_vector(7 downto 0);
 			InB	: in std_logic_vector(7 downto 0);
 			Sel	: in std_logic;
@@ -171,10 +174,27 @@ architecture rlt of Reto2002B_CPU is
 
 	
 	component ClkDiv
-		port(
+	port(
 		Clkin  : in std_logic;
 		Rst    : in std_logic;
 		Clkout : out std_logic
+	);
+	end component;
+
+	component DispOff
+	port (
+		Turnoff    : out std_logic_vector(1 downto 0)
+	);
+	end component;	
+	
+	component Mem
+	port(
+		Addr   : in std_logic_vector(7 downto 0);
+		Datars : out std_logic_vector(2 downto 0);
+		Datart : out std_logic_vector(2 downto 0);
+		Datard : out std_logic_vector(2 downto 0);
+		Datai  : out std_logic_vector(7 downto 0);
+		DataOp : out std_logic_vector(3 downto 0)
 	);
 	end component;
 	
@@ -185,14 +205,23 @@ begin
 		Clk	  => Clk50MHz,
 		Rst	  => Clr,
 		Cen	  => ClkEn,
-		PCIn  =>BrJiJrM,
-		PCOut => PC)
-	;
+		PCIn    => BrJiJrM,
+		PCOut   => PC
+	);
 	
+	C02 : Mem
+	port map(
+		Addr   => PC,
+		Datars => rs,
+		Datart => rt,
+		Datard => rd,
+		Datai  => imm,
+		DataOp => opcode
+	);
 	
 	C03 : CtrlUnit
 	port map (
-		Oper         => Opcode,
+		Oper         => opcode,
 		RegSrc_OP    => RegSrc,
       JiJr_Op      => JiJr,
       ALUOp_Op     => ALUOp, 
@@ -233,7 +262,7 @@ begin
    port map(
 	   InA => PC,
 	   InB => IncremM,
-	   S   =>AdderS
+	   S   => AdderS
    );
 	
 	
@@ -242,7 +271,7 @@ begin
 	   InA => "00000001",
 	   InB => imm,
 	   Sel => BrEqM,
-	   M => IncremM
+	   M   => IncremM
    );
 	
 	
@@ -292,7 +321,7 @@ begin
 		Clk  => Clk50Mhz,
 		Rst  => Clr,
 		Cen  => ClkEn,
-		En	  => Write7Seg,
+		En	  => WriteLEDs,
 		Inrs => rsd,
 		OutD => LEDs
 	);	
@@ -318,5 +347,12 @@ begin
 		Clkout => ClkEn
 	);
 	
+	
+	C16: DispOff
+	port map
+	(
+		Turnoff => Turnoff
+	);
+
 end rlt;
 

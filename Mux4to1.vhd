@@ -1,16 +1,16 @@
 
 ----------------------------------------------------------------------------------
 -- Company:        ITESM - Campus Qro.        
--- Engineers:       A01706424 - José Miguel Luna Vega
---                  A01701466 - Carlos Emilio Magana Arias
+-- Engineers:      A01706424 - José Miguel Luna Vega
+--                 A01701466 - Carlos Emilio Magana Arias
 --                 A01706190 - Israel Ivan Arroyo Parada
 -- 
 -- Create Date:    06/03/2021
 -- Module Name:    Mux4to1
--- Project Name:   
+-- Project Name:   RISC Processor Design 
 -- Target Devices: FPGA DE10-Lite 
 -- Tool versions:  Quartus Prime Lite 18.1
--- Description:     
+-- Description:    Multiplexor used in different data buses of the processor 
 --
 -- Dependencies:   
 -- Revision: v1
@@ -18,7 +18,8 @@
 -- Additional Comments: 
 --
 ----------------------------------------------------------------------------------
-Library ieee;
+
+library ieee;
 Use ieee.std_logic_1164.all;
 Use ieee.numeric_std.all;
 
@@ -33,7 +34,7 @@ end Mux4to1;
 
 architecture a of Mux4to1 is
 begin
-	Process(InA,InB)
+	Process(Sel,InA,InB)
 	begin
 		case Sel is
 			when "00" =>
@@ -44,11 +45,9 @@ begin
             M <= InC;
          when "11" =>
             M <= InD;
-         when others =>
-            M <= (others => '0');
+
         end case;
 	end process;
 	
 end a;
 		
-			

@@ -1,3 +1,25 @@
+----------------------------------------------------------------------------------
+-- Company:        ITESM - Campus Qro.        
+-- Engineers:      A01706424 - José Miguel Luna Vega
+--                 A01701466 - Carlos Emilio Magana Arias
+--                 A01706190 - Israel Ivan Arroyo Parada
+-- 
+-- Create Date:    06/03/2021
+-- Module Name:    Reg8
+-- Project Name:   RISC Processor Design 
+-- Target Devices: FPGA DE10-Lite 
+-- Tool versions:  Quartus Prime Lite 18.1
+-- Description:    Register to give data to output devices 
+--
+-- Dependencies:   
+-- Revision: v1
+-- Revision 0.01 - File Created
+-- Additional Comments: 
+--
+----------------------------------------------------------------------------------
+
+
+
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
@@ -14,20 +36,16 @@ entity Reg8 is
 end Reg8;
 
 architecture rtl of Reg8 is
-
-  signal c: std_logic_vector(7 downto 0);
   
 begin
 	
 	code: process(Clk,Rst,En)
 	begin
 		if (Rst = '0') then
-			c <= (others => '0');
-			OutD <= c;
+			OutD <=  (others => '0');
 		elsif (falling_edge(Clk)) then
 			if (Cen = '1') and (En = '1') then
-				c <= Inrs;
-				OutD <= c;
+				OutD <= Inrs;
 			end if;
 		end if;
 	end process code;

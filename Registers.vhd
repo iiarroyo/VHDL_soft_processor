@@ -2,13 +2,15 @@
 ----------------------------------------------------------------------------------
 -- Company:        ITESM - Campus Qro.        
 -- Engineer:       A01706424 - José Miguel Luna Vega
+--                 A01701466 - Carlos Emilio Magana Arias
+--                 A01706190 - Israel Ivan Arroyo Parada
 -- 
 -- Create Date:    06/03/2021
 -- Module Name:    Registers
--- Project Name:   
+-- Project Name:   RISC Processor Design 
 -- Target Devices: FPGA DE10-Lite 
 -- Tool versions:  Quartus Prime Lite 18.1
--- Description:     
+-- Description:    8 register module 
 --
 -- Dependencies:   
 -- Revision: v1
@@ -48,8 +50,47 @@ architecture rlt of Registers is
 
 begin
 
-	code: process(Clk,Rst,WE)
+	process(Clk,Rst,WE)
 	begin
+
+		case SelA is
+			when "000" =>
+				OutA <= r0;
+			when "001" =>
+				OutA <= r1;
+			when "010" =>
+				OutA <= r2;
+			when "011" =>
+				OutA <= r3;
+			when "100" =>
+				OutA <= r4;
+			when "101" =>
+				OutA <= r5;
+			when "110" =>
+				OutA <= r6;
+			when "111" =>
+				OutA <= r7;
+		end case;
+
+		case SelB is
+			when "000" =>
+				OutB <= r0;
+			when "001" =>
+				OutB <= r1;
+			when "010" =>
+				OutB <= r2;
+			when "011" =>
+				OutB <= r3;
+			when "100" =>
+				OutB <= r4;
+			when "101" =>
+				OutB <= r5;
+			when "110" =>
+				OutB <= r6;
+			when "111" =>
+				OutB <= r7;
+		end case;	
+	
 		if (Rst = '0') then
 			r0 <= (others => '0');
 			r1 <= (others => '0');
@@ -59,9 +100,9 @@ begin
 			r5 <= (others => '0');
 			r6 <= (others => '0');
 			r7 <= (others => '0');
-			OutA <= (others => '0');
-			OutB <= (others => '0');
+
 		elsif (falling_edge(Clk)) then  
+		
 			if (Cen = '1') and (WE = '1') then
 				case SelWR is
 					when "000" =>
@@ -83,47 +124,7 @@ begin
 				end case;
 			end if;
 		end if;
-		
-		if (WE = '0') then
-			case SelA is
-				when "001" =>
-					OutA <= r0;
-				when "000" =>
-					OutA <= r1;
-				when "010" =>
-					OutA <= r2;
-				when "011" =>
-					OutA <= r3;
-				when "100" =>
-					OutA <= r4;
-				when "101" =>
-					OutA <= r5;
-				when "110" =>
-					OutA <= r6;
-				when "111" =>
-					OutA <= r7;
-			end case;
-
-			case SelB is
-				when "000" =>
-					OutB <= r0;
-				when "001" =>
-					OutB <= r1;
-				when "010" =>
-					OutB <= r2;
-				when "011" =>
-					OutB <= r3;
-				when "100" =>
-					OutB <= r4;
-				when "101" =>
-					OutB <= r5;
-				when "110" =>
-					OutB <= r6;
-				when "111" =>
-					OutB <= r7;
-			end case;
-		end if;	
 	
-	end process code;
+	end process; 
 	
 end rlt;

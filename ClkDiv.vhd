@@ -1,14 +1,14 @@
 
 ----------------------------------------------------------------------------------
 -- Company:        ITESM - Campus Qro.        
--- Engineers:       A01706424 - José Miguel Luna Vega
---                  A01701466 - Carlos Emilio Magana Arias
+-- Engineers:      A01706424 - José Miguel Luna Vega
+--                 A01701466 - Carlos Emilio Magana Arias
 --                 A01706190 - Israel Ivan Arroyo Parada
 --
 -- Create Date:    02/22/2021 
 -- Design Name: 
 -- Module Name:    ClkDiv 
--- Project Name:   
+-- Project Name:   RISC Processor Design 
 -- Target Devices: FPGA DE10-Lite 
 -- Tool versions:  Quartus Prime Lite 18.1
 -- Description:    Frequency Divider to convert 50MHz Clock embebed to 1Hz 
@@ -22,7 +22,6 @@
 --
 ----------------------------------------------------------------------------------
 
--- Library and Package declaration (commonly used)
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
@@ -40,7 +39,7 @@ end ClkDiv;
 architecture rtl of ClkDiv is
 
   -- Define a value that contains the desired Frequency
-  constant DesiredFreq : natural := 1;  -- Once per second changes in the FSM
+  constant DesiredFreq : natural := 5;  -- Once per second changes in the FSM
   -- Frequency for a DE2-Lite board is 50MHz
   constant BoardFreq   : natural := 50_000_000;
   -- Calculate the value the counter should reach to obtain desired Freq.

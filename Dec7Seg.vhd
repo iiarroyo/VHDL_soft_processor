@@ -1,17 +1,16 @@
 
-
 ----------------------------------------------------------------------------------
 -- Company:        ITESM - Campus Qro.        
--- Engineers:       A01706424 - José Miguel Luna Vega
---                  A01701466 - Carlos Emilio Magana Arias
+-- Engineer:       A01706424 - José Miguel Luna Vega
+--                 A01701466 - Carlos Emilio Magana Arias
 --                 A01706190 - Israel Ivan Arroyo Parada
 -- 
 -- Create Date:    06/03/2021
--- Module Name:    Dec7Seg
--- Project Name:   
+-- Module Name:    Dec7Seg 
+-- Project Name:   RISC Processor Design 
 -- Target Devices: FPGA DE10-Lite 
 -- Tool versions:  Quartus Prime Lite 18.1
--- Description:     
+-- Description:    Binary to hexadecimal decoder for a 7 segments display 
 --
 -- Dependencies:   
 -- Revision: v1

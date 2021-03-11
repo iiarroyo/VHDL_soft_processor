@@ -1,16 +1,15 @@
-
 ----------------------------------------------------------------------------------
 -- Company:        ITESM - Campus Qro.        
--- Engineers:       A01706424 - José Miguel Luna Vega
---                  A01701466 - Carlos Emilio Magana Arias
+-- Engineers:      A01706424 - José Miguel Luna Vega
+--                 A01701466 - Carlos Emilio Magana Arias
 --                 A01706190 - Israel Ivan Arroyo Parada
 -- 
 -- Create Date:    06/03/2021
 -- Module Name:    FullAdder
--- Project Name:   
+-- Project Name:   RISC Processor Design 
 -- Target Devices: FPGA DE10-Lite 
 -- Tool versions:  Quartus Prime Lite 18.1
--- Description:     
+-- Description:    Module to add to the Program Counter the correspondent increment 
 --
 -- Dependencies:   
 -- Revision: v1
@@ -18,6 +17,7 @@
 -- Additional Comments: 
 --
 ----------------------------------------------------------------------------------
+
 
 Library ieee;
 Use ieee.std_logic_1164.all;

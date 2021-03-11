@@ -1,15 +1,16 @@
+
 ----------------------------------------------------------------------------------
 -- Company:        ITESM - Campus Qro.        
--- Engineers:       A01706424 - José Miguel Luna Vega
---                  A01701466 - Carlos Emilio Magana Arias
+-- Engineers:      A01706424 - José Miguel Luna Vega
+--                 A01701466 - Carlos Emilio Magana Arias
 --                 A01706190 - Israel Ivan Arroyo Parada
 -- 
 -- Create Date:    06/03/2021
 -- Module Name:    CtrlUnit
--- Project Name:   
+-- Project Name:   RISC Processor Design 
 -- Target Devices: FPGA DE10-Lite 
 -- Tool versions:  Quartus Prime Lite 18.1
--- Description:     
+-- Description:    
 --
 -- Dependencies:   
 -- Revision: v1
@@ -36,24 +37,24 @@ architecture rlt of CtrlUnit is
 signal Output : std_logic_vector(11 downto 0);
 
 begin
-		  -- 
-	Output<= "100001001000" when Oper = "0000" else --  add
-				"100011001000" when Oper = "0001" else --  sub
-				"100101001000" when Oper = "0010" else --  and
-				"100111001000" when Oper = "0011" else --  or
-				"101001001000" when Oper = "0100" else --  xor
-				"101011001000" when Oper = "0101" else --  not
-				"101101001000" when Oper = "0110" else --  shl
-				"101111001000" when Oper = "0111" else --  shr
+		  --   RS   ALU   RW  7   L  PC   B   Ji
+	Output<= "10"&"000"&'1'&'0'&'0'&'0'&'0'&"00" when Oper = "0000" else --  add
+				"10"&"001"&'1'&'0'&'0'&'0'&'0'&"00" when Oper = "0001" else --  sub
+				"10"&"010"&'1'&'0'&'0'&'0'&'0'&"00" when Oper = "0010" else --  and
+				"10"&"011"&'1'&'0'&'0'&'0'&'0'&"00" when Oper = "0011" else --  or
+				"10"&"100"&'1'&'0'&'0'&'0'&'0'&"00" when Oper = "0100" else --  xor
+				"10"&"101"&'1'&'0'&'0'&'0'&'0'&"00" when Oper = "0101" else --  not
+				"10"&"110"&'1'&'0'&'0'&'0'&'0'&"00" when Oper = "0110" else --  shl
+				"10"&"111"&'1'&'0'&'0'&'0'&'0'&"00" when Oper = "0111" else --  shr
 			 
-				"000001001000" when Oper = "1000" else --  ld
-				"010001001000" when Oper = "1001" else --  spc
-				"000010000100" when Oper = "1010" else --  beq
-				"000000000010" when Oper = "1011" else --  ji
-				"000000000001" when Oper = "1100" else --  jr
-				"000000101000" when Oper = "1101" else --  w7seg
-				"000000011000" when Oper = "1110" else --  wleds
-				"110001001000" when Oper = "1111" else --  rsw
+				"00"&"000"&'1'&'0'&'0'&'0'&'0'&"00" when Oper = "1000" else --  ld
+				"01"&"000"&'1'&'0'&'0'&'0'&'0'&"00" when Oper = "1001" else --  spc
+				"00"&"001"&'0'&'0'&'0'&'0'&'1'&"00" when Oper = "1010" else --  beq
+				"00"&"000"&'0'&'0'&'0'&'0'&'0'&"10" when Oper = "1011" else --  ji
+				"00"&"000"&'0'&'0'&'0'&'0'&'0'&"01" when Oper = "1100" else --  jr
+				"00"&"000"&'0'&'1'&'0'&'0'&'0'&"00" when Oper = "1101" else --  w7seg
+				"00"&"000"&'0'&'0'&'1'&'0'&'0'&"00" when Oper = "1110" else --  wleds
+				"11"&"000"&'1'&'0'&'0'&'0'&'0'&"00" when Oper = "1111" else --  rsw
 			 
 				"000000000000"; -- All off
 

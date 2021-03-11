@@ -1,16 +1,16 @@
 
 ----------------------------------------------------------------------------------
 -- Company:        ITESM - Campus Qro.        
--- Engineers:       A01706424 - José Miguel Luna Vega
---                  A01701466 - Carlos Emilio Magana Arias
+-- Engineers:      A01706424 - José Miguel Luna Vega
+--                 A01701466 - Carlos Emilio Magana Arias
 --                 A01706190 - Israel Ivan Arroyo Parada
 -- 
 -- Create Date:    06/03/2021
 -- Module Name:    ProgCounter
--- Project Name:   
+-- Project Name:   RISC Processor Design 
 -- Target Devices: FPGA DE10-Lite 
 -- Tool versions:  Quartus Prime Lite 18.1
--- Description:     
+-- Description:    
 --
 -- Dependencies:   
 -- Revision: v1
@@ -18,6 +18,7 @@
 -- Additional Comments: 
 --
 ----------------------------------------------------------------------------------
+
 
 library IEEE;
 use IEEE.std_logic_1164.all;
@@ -34,20 +35,17 @@ entity ProgCounter is
 end ProgCounter;
 
 architecture rtl of ProgCounter is
-
-  signal Count: std_logic_vector(7 downto 0);
   
 begin
 	
 	counter: process(Clk,Rst)
 	begin
 		if (Rst = '0') then
-			Count <= (others => '0');
-			PCOut <= Count;
+			PCOut <= (others => '0');
+
 		elsif (rising_edge(Clk)) then
 			if (Cen = '1') then
-				Count <= PCIn;
-				PCOut <= Count;
+				PCOut <=  PCIn;
 			end if;
 		end if;
 	end process counter;
