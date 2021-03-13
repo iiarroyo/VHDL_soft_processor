@@ -1,0 +1,31 @@
+;Aqui empieza el programa
+;Multiplica SW[7:4] * SW[3:0]
+;dando el resultado en el display
+;de 7-segmentos, asi como en los LEDs
+;Read Switch value
+RSW R0		;Switch value will be saved in R0
+RSW R1		;and in R1
+;Initialize Registers
+LD R2 15	;Used for masking
+LD R3 1		;Decrementing value (Constant)
+LD R4 0		;Comparison value (Constant)
+LD R7 0		;Parial and final Sums
+;Separate value read from switches
+;into individual registers
+SHR R0 R0	;Shift 8 top bits to botton 4
+SHR R0 R0	;Shift 8 top bits to botton 4
+SHR R0 R0	;Shift 8 top bits to botton 4
+SHR R0 R0	;Shift 8 top bits to botton 4
+AND R2 R1 R1 ;Mask bottom 4 bits
+;Multiplication by additions Loop
+#LOOP
+BEQ R4 R1 FIN	;Finish performing partial additions?
+ADD R7 R0 R7	;Do partial addition	
+SUB R1 R3 R1	;One less addition to do
+JI LOOP
+;Outputs
+#FIN
+W7SEG R7 		;Display result on 7-Segment display
+WLEDS R7		;Display result on LEDs
+#END	
+JI END			;Halt

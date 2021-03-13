@@ -39,7 +39,7 @@ end ClkDiv;
 architecture rtl of ClkDiv is
 
   -- Define a value that contains the desired Frequency
-  constant DesiredFreq : natural := 5;  -- Once per second changes in the FSM
+  constant DesiredFreq : natural := 60;  -- Once per second changes in the FSM
   -- Frequency for a DE2-Lite board is 50MHz
   constant BoardFreq   : natural := 50_000_000;
   -- Calculate the value the counter should reach to obtain desired Freq.

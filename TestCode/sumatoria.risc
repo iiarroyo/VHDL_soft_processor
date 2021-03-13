@@ -1,0 +1,20 @@
+; give sum of number introduced in switches
+
+RSW R0
+LD R1 1
+LD R2 0
+LD R3 0
+
+#LOOP
+
+BEQ R0 R3 FIN
+ADD R2 R0 R2 
+SUB R0 R1 R0
+
+JI LOOP
+
+
+#FIN
+W7SEG R2
+#END
+JI END

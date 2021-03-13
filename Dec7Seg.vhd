@@ -44,7 +44,7 @@ begin
 			 "00011111" when D = "0111" else -- 7
 			 "00000001" when D = "1000" else -- 8
 			 "00001001" when D = "1001" else -- 9
-			 "00010011" when D = "1010" else -- A
+			 "00010001" when D = "1010" else -- A
 			 "11000001" when D = "1011" else -- b
 			 "01100011" when D = "1100" else -- C
 			 "10000101" when D = "1101" else -- d
